@@ -14,7 +14,7 @@ const Loading = () => {
                     <div className="dot-spinner__dot" />
                     <div className="dot-spinner__dot" />
                 </div>
-                <p className='text-light pt-3'>Good things comming this way...</p>
+                <p className='text-light pt-3'>Good things coming this way...</p>
             </div>
         </>
     )
