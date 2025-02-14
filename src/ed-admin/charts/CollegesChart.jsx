@@ -13,14 +13,15 @@ const CollegesChart = ({ edCourses }) => {
     const chartRef = useRef(null);
 
     useEffect(() => {
-        setTotalColleges(edCourses?.length);
+        const validCourses = edCourses?.filter(college => college?.collegeId) || [];
+        setTotalColleges(validCourses.length);
 
-        if (edCourses && edCourses?.length > 0) {
+        if (validCourses.length > 0) {
             const collegeCountByLoc = {};
             const courseCountByLoc = {};
             const uniqueCourses = new Set();
 
-            edCourses.forEach(college => {
+            validCourses.forEach(college => {
                 const state = college?.collegeId?.location[0]?.state;
 
                 college?.courses.forEach(course => {
