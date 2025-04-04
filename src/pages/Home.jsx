@@ -80,7 +80,7 @@ const Home = () => {
       </div>
 
       {/* testimonials */}
-      <div className='container mb-5'>
+      <div className='mb-5'>
         <h1 className="text-center"><span className='text-gradient'>Success </span>Stories</h1>
         <div className='testi mt-5'>
           <div className='marque-parent'>

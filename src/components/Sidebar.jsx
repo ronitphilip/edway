@@ -12,30 +12,35 @@ const Sidebar = ({ collegeList }) => {
     const [location, setLocation] = useState([])
     const [allCourses, setAllCourses] = useState([])
     const [displayCourse, setDisplayCourse] = useState([])
-    const [ filterCourses, setFilterCourses ] = useState([])
-    const [ show, setShow ] = useState(true)
-    const [ showLoc, setShowLoc ] = useState(true)
-    
+    const [filterCourses, setFilterCourses] = useState([])
+    const [show, setShow] = useState(true)
+    const [showLoc, setShowLoc] = useState(true)
+    console.log(collegeList);
+
     const itemSlice = () => {
-        setLocation(collegeList.slice(0, 3))
+        const uniqueStates = [...new Map(collegeList.map(college => [college.location[0].state, college])).values()];
+        setLocation(uniqueStates.slice(0, 3));
+
         setDisplayCourse(allCourses.slice(0, 3))
     }
 
     const allLocation = (showLoc) => {
-        if(showLoc){
-            setLocation(collegeList)
+        if (showLoc) {
+            const uniqueStates = [...new Map(collegeList.map(college => [college.location[0].state, college])).values()];
+            setLocation(uniqueStates);
+
             setShowLoc(!showLoc)
-        }else{
+        } else {
             setLocation(collegeList.slice(0, 3))
             setShowLoc(!showLoc)
         }
     }
 
     const showAllCourses = (show) => {
-        if(show){
+        if (show) {
             setDisplayCourse(allCourses)
             setShow(!show)
-        }else{
+        } else {
             itemSlice()
             setShow(!show)
         }
@@ -45,7 +50,7 @@ const Sidebar = ({ collegeList }) => {
         try {
             const result = await getAllCoursesAPI()
             setFilterCourses(result.data);
-            
+
             if (result) {
                 let uniqueCourses = [];
 
@@ -71,30 +76,30 @@ const Sidebar = ({ collegeList }) => {
         itemSlice()
     }, [allCourses])
 
-    const handleSortByLocation  = (location) => {
-        if(LocationUpdate){
+    const handleSortByLocation = (location) => {
+        if (LocationUpdate) {
             dispatch(setActiveLocation(location))
             dispatch(sortByLocation(location.toLowerCase()))
-        }else{
+        } else {
             dispatch(resetFilters());
         }
     }
 
-    const handleSortByCourse  = (selectedCourse) => {
-        if(update){
-            const filteredColleges = filterCourses.filter(college => 
+    const handleSortByCourse = (selectedCourse) => {
+        if (update) {
+            const filteredColleges = filterCourses.filter(college =>
                 college.courses.some(course => course.coursename.toLowerCase().includes(selectedCourse.toLowerCase()))
             );
-    
+
             const filteredCollegeIds = filteredColleges.map(college => college.collegeId._id);
 
             dispatch(setActiveCourse(selectedCourse))
             dispatch(sortByCourse(filteredCollegeIds))
-        }else{
+        } else {
             dispatch(resetFilters())
         }
     };
-    
+
     return (
         <>
             <div className='p-4'>
@@ -117,39 +122,39 @@ const Sidebar = ({ collegeList }) => {
                         update ? (
                             displayCourse.length > 0 && displayCourse.map((course, index) => (
                                 <div key={index}>
-                                    <span className='ms-3 pointerbtn' onClick={()=>handleSortByCourse(course)}>{course}</span>
+                                    <span className='ms-3 pointerbtn' onClick={() => handleSortByCourse(course)}>{course}</span>
                                 </div>
                             ))
                         ) : (
-                            <div className='bg-secondary rounded d-flex justify-content-between' onClick={()=>handleSortByCourse(null)}>
+                            <div className='bg-secondary rounded d-flex justify-content-between' onClick={() => handleSortByCourse(null)}>
                                 <button className='ms-3 p-0 bg-transparent border-0 text-light'>{activeCourse}</button>
                                 <button className='me-3 p-0 bg-transparent border-0 text-light'><i className="fa-regular fa-circle-xmark"></i></button>
                             </div>
                         )
                     }
-                    { update && <button onClick={()=>showAllCourses(show)} className='ms-3 btn btn-link p-0'>{show ? 'Show More' : 'Show Less'}</button> }
+                    {update && <button onClick={() => showAllCourses(show)} className='ms-3 btn btn-link p-0'>{show ? 'Show More' : 'Show Less'}</button>}
                 </div>
                 {/* Location */}
                 <div className="border-bottom py-3">
                     <span className='nav-item small-text'>Location</span>
                     {
                         !LocationUpdate ? (
-                            <div className='bg-secondary rounded d-flex justify-content-between' onClick={()=>handleSortByLocation(null)}>
+                            <div className='bg-secondary rounded d-flex justify-content-between' onClick={() => handleSortByLocation(null)}>
                                 <button className='ms-3 p-0 bg-transparent border-0 text-light'>{activeLocation}</button>
                                 <button className='me-3 p-0 bg-transparent border-0 text-light'><i className="fa-regular fa-circle-xmark"></i></button>
                             </div>
-                           
+
                         ) : (
                             location.length > 0 && location.map((college, index) => (
                                 <div key={index}>
-                                    <button className='ms-3 p-0 bg-transparent border-0 text-light' onClick={()=>handleSortByLocation(college.location[0].state)}>{college.location[0].state}</button>
+                                    <button className='ms-3 p-0 bg-transparent border-0 text-light' onClick={() => handleSortByLocation(college.location[0].state)}>{college.location[0].state}</button>
                                 </div>
                             ))
                         )
                     }
-                    { LocationUpdate && location.length > 3 ?
-                        <button onClick={()=>allLocation(showLoc)} className='ms-3 btn btn-link border-0 p-0'>{showLoc ? 'Show More' : 'Show Less'}</button> 
-                    : null }
+                    {LocationUpdate && location.length > 3 ?
+                        <button onClick={() => allLocation(showLoc)} className='ms-3 btn btn-link border-0 p-0'>{showLoc ? 'Show More' : 'Show Less'}</button>
+                        : null}
                 </div>
             </div>
         </>

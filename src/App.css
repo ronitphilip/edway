@@ -151,14 +151,20 @@
 }
 
 .testi {
-    height: 300px;
+    height: 200px;
     overflow: hidden;
     position: relative;
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 20% 80%,
+        transparent
+    );
 }
 
 .marque-parent {
     display: flex;
-    animation: marquee 40s linear infinite;
+    animation: marquee 20s linear infinite;
     white-space: normal;
 }
 
@@ -173,7 +179,7 @@
     width: 300px;
     border: 2px solid grey;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .marqee-card:hover {
